@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+:root {
+  --bg: #f4f6fb;
+  --ink: #0f172a;
+  --mesh-a: #22d3ee;
+  --mesh-b: #fb7185;
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 5% 10%, color-mix(in srgb, var(--mesh-a) 35%, transparent), transparent 34%),
+    radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--mesh-b) 28%, transparent), transparent 40%),
+    var(--bg);
+  min-height: 100vh;
+}
