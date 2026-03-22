@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { ComposicionChart } from '../components/results/ComposicionChart'
@@ -10,7 +9,6 @@ import { exportStudyPdf } from '../services/pdf/exportStudyPdf'
 
 export function ResultadoPage() {
   const navigate = useNavigate()
-  const resultsRef = useRef<HTMLDivElement>(null)
   const session = readStudySession()
 
   if (!session) {
@@ -55,7 +53,7 @@ export function ResultadoPage() {
         <button
           type="button"
           onClick={() => {
-            void exportStudyPdf(session, resultsRef.current)
+            void exportStudyPdf(session)
           }}
           className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white"
         >
@@ -63,15 +61,21 @@ export function ResultadoPage() {
         </button>
       </header>
 
-      <section ref={resultsRef} className="space-y-6">
+      <section className="space-y-6">
         <ResultadosTable resultado={resultado} />
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <ComposicionChart resultado={resultado} />
-          <SomatotipoProfile resultado={resultado} />
+          <div data-pdf-chart="composicion" data-pdf-title="Composicion corporal">
+            <ComposicionChart resultado={resultado} />
+          </div>
+          <div data-pdf-chart="somatotipo" data-pdf-title="Perfil somatotipico">
+            <SomatotipoProfile resultado={resultado} />
+          </div>
         </div>
 
-        <SomatocartaChart resultado={resultado} />
+        <div data-pdf-chart="somatocarta" data-pdf-title="Somatocarta">
+          <SomatocartaChart resultado={resultado} />
+        </div>
 
         <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-600">Interpretacion general</h2>
