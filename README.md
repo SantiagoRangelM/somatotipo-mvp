@@ -49,8 +49,7 @@ npm run test
 3. En `Build and deployment`, selecciona `GitHub Actions`.
 4. El workflow `.github/workflows/deploy-pages.yml` hace:
    - `npm ci`
-   - `npm run test`
-   - `npm run build`
+   - `npm run build:pages` (genera `dist` y crea `dist/404.html` para fallback de rutas SPA)
    - publica `dist` en Pages.
 5. URL esperada del proyecto:
    - `https://<usuario>.github.io/somatotipo-mvp/`
