@@ -1,6 +1,7 @@
 import {
   CartesianGrid,
   LabelList,
+  ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
   Scatter,
@@ -26,21 +27,44 @@ export function SomatocartaChart({ resultado }: Props) {
   ]
 
   return (
-    <div className="h-80 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">Somatocarta</h3>
+    <div className="h-96 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <h3 className="mb-1 text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">Somatocarta</h3>
+      <p className="mb-3 text-xs text-slate-500">X = ectomorfia - endomorfia · Y = 2*mesomorfia - (endomorfia + ectomorfia)</p>
       <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart margin={{ top: 12, right: 16, bottom: 12, left: 6 }}>
+        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 8 }}>
           <CartesianGrid strokeDasharray="4 4" />
-          <XAxis type="number" dataKey="x" name="X" domain={[-8, 8]} />
-          <YAxis type="number" dataKey="y" name="Y" domain={[-8, 16]} />
+
+          <ReferenceArea x1={-8} x2={-1} y1={-8} y2={16} fill="#fde68a" fillOpacity={0.2} />
+          <ReferenceArea x1={-1} x2={1} y1={-8} y2={16} fill="#86efac" fillOpacity={0.2} />
+          <ReferenceArea x1={1} x2={8} y1={-8} y2={16} fill="#bae6fd" fillOpacity={0.2} />
+
+          <XAxis
+            type="number"
+            dataKey="x"
+            name="X"
+            domain={[-8, 8]}
+            label={{ value: 'Ectomorfia ←→ Endomorfia', position: 'insideBottom', offset: -8 }}
+          />
+          <YAxis
+            type="number"
+            dataKey="y"
+            name="Y"
+            domain={[-8, 16]}
+            label={{ value: 'Mesomorfia', angle: -90, position: 'insideLeft' }}
+          />
           <ReferenceLine x={0} stroke="#334155" strokeDasharray="3 3" />
           <ReferenceLine y={0} stroke="#334155" strokeDasharray="3 3" />
           <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-          <Scatter data={data} fill="#ea580c">
+          <Scatter data={data} fill="#dc2626">
             <LabelList dataKey="label" position="top" />
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>
+      <div className="mt-2 flex flex-wrap gap-3 text-xs">
+        <span className="rounded bg-yellow-100 px-2 py-1 text-yellow-900">Zona endomorfica</span>
+        <span className="rounded bg-green-100 px-2 py-1 text-green-900">Zona balanceada</span>
+        <span className="rounded bg-cyan-100 px-2 py-1 text-cyan-900">Zona ectomorfica</span>
+      </div>
     </div>
   )
 }

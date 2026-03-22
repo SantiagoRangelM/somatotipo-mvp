@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ComposicionChart } from '../components/results/ComposicionChart'
 import { ResultadosTable } from '../components/results/ResultadosTable'
 import { SomatocartaChart } from '../components/results/SomatocartaChart'
+import { SomatotipoProfile } from '../components/results/SomatotipoProfile'
 import { readStudySession } from '../infrastructure/session/studySessionStore'
 import { exportStudyPdf } from '../services/pdf/exportStudyPdf'
 
@@ -34,7 +35,7 @@ export function ResultadoPage() {
         <div>
           <h1 className="text-3xl font-black text-slate-900">Resultado del estudio</h1>
           <p className="mt-2 text-sm text-slate-600">
-            {input.nombrePersona} · {input.fechaEvaluacion} · Sexo {input.sexo} · {input.edad} anos
+            {input.nombrePersona} · {input.fechaEvaluacion} · Sexo {input.sexo} · {input.edad} años
           </p>
         </div>
         <button
@@ -51,8 +52,10 @@ export function ResultadoPage() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <ComposicionChart resultado={resultado} />
-          <SomatocartaChart resultado={resultado} />
+          <SomatotipoProfile resultado={resultado} />
         </div>
+
+        <SomatocartaChart resultado={resultado} />
 
         <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-600">Interpretacion general</h2>

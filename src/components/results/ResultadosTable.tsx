@@ -16,8 +16,6 @@ export function ResultadosTable({ resultado }: Props) {
     ['ICC', resultado.indiceCinturaCadera],
     ['ICE', resultado.indiceCinturaEstatura],
     ['Riesgo cardiovascular', resultado.riesgoCardiovascular],
-    ['Somatotipo', `${resultado.somatotipo.endomorfia} - ${resultado.somatotipo.mesomorfia} - ${resultado.somatotipo.ectomorfia}`],
-    ['Somatocarta (X,Y)', `${resultado.somatocarta.x}, ${resultado.somatocarta.y}`],
   ]
 
   return (

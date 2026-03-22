@@ -32,7 +32,10 @@ export function DatosBasicosSection({ register, errors }: Props) {
 
         <FormField label="Edad" name="edad" step="1" register={register} errors={errors} />
         <FormField label="Peso (kg)" name="pesoKg" register={register} errors={errors} />
-        <FormField label="Talla (cm)" name="tallaCm" register={register} errors={errors} />
+        <div>
+          <FormField label="Talla (cm o m)" name="tallaCm" register={register} errors={errors} />
+          <p className="mt-1 text-xs text-slate-500">Acepta 163 o 1.63 (se normaliza automaticamente).</p>
+        </div>
       </div>
     </section>
   )

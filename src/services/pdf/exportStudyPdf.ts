@@ -22,7 +22,7 @@ export function exportStudyPdf(session: EstudioSomatotipoSession): void {
   line(`Nombre: ${input.nombrePersona}`)
   line(`Fecha: ${input.fechaEvaluacion}`)
   line(`Sexo: ${input.sexo}`)
-  line(`Edad: ${input.edad} anos`, 10)
+  line(`Edad: ${input.edad} años`, 10)
 
   doc.setFont('helvetica', 'bold')
   line('Resultados', 8)
