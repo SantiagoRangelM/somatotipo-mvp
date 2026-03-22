@@ -17,7 +17,7 @@ export function DatosBasicosSection({ register, errors }: Props) {
         <label className="grid gap-1">
           <span className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-600">Sexo</span>
           <select
-            className="w-full rounded-xl border border-slate-300 bg-white/90 px-3 py-2.5 text-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-200"
+            className="w-full rounded-xl border border-slate-300 bg-white/90 px-3 py-1.5 text-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-200"
             {...register('sexo')}
             defaultValue=""
           >
@@ -30,7 +30,7 @@ export function DatosBasicosSection({ register, errors }: Props) {
           {errors.sexo?.message ? <span className="text-xs text-rose-600">{errors.sexo.message}</span> : null}
         </label>
 
-        <FormField label="Edad" name="edad" step="1" register={register} errors={errors} />
+        <FormField label="Edad" name="edad" step="1" maxDigits={3} register={register} errors={errors} />
         <FormField label="Peso (kg)" name="pesoKg" register={register} errors={errors} />
         <div>
           <FormField label="Talla (cm o m)" name="tallaCm" register={register} errors={errors} />

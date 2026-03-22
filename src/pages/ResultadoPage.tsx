@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ComposicionChart } from '../components/results/ComposicionChart'
 import { ResultadosTable } from '../components/results/ResultadosTable'
@@ -8,6 +9,8 @@ import { readStudySession } from '../infrastructure/session/studySessionStore'
 import { exportStudyPdf } from '../services/pdf/exportStudyPdf'
 
 export function ResultadoPage() {
+  const navigate = useNavigate()
+  const resultsRef = useRef<HTMLDivElement>(null)
   const session = readStudySession()
 
   if (!session) {
@@ -33,21 +36,34 @@ export function ResultadoPage() {
     <main className="mx-auto max-w-6xl px-4 py-10 md:px-8">
       <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900">Resultado del estudio</h1>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-lg font-semibold text-slate-700 transition hover:bg-slate-100"
+              aria-label="Volver atras"
+              title="Volver atras"
+            >
+              ←
+            </button>
+            <h1 className="text-3xl font-black text-slate-900">Resultado del estudio</h1>
+          </div>
           <p className="mt-2 text-sm text-slate-600">
             {input.nombrePersona} · {input.fechaEvaluacion} · Sexo {input.sexo} · {input.edad} años
           </p>
         </div>
         <button
           type="button"
-          onClick={() => exportStudyPdf(session)}
+          onClick={() => {
+            void exportStudyPdf(session, resultsRef.current)
+          }}
           className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white"
         >
           Exportar PDF
         </button>
       </header>
 
-      <section className="space-y-6">
+      <section ref={resultsRef} className="space-y-6">
         <ResultadosTable resultado={resultado} />
 
         <div className="grid gap-6 lg:grid-cols-2">

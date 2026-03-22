@@ -27,11 +27,19 @@ export function SomatocartaChart({ resultado }: Props) {
   ]
 
   return (
-    <div className="h-96 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <h3 className="mb-1 text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">Somatocarta</h3>
-      <p className="mb-3 text-xs text-slate-500">X = ectomorfia - endomorfia · Y = 2*mesomorfia - (endomorfia + ectomorfia)</p>
-      <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 8 }}>
+      <p className="mb-3 pr-64 text-xs text-slate-500">X = ectomorfia - endomorfia · Y = 2*mesomorfia - (endomorfia + ectomorfia)</p>
+
+      <div className="absolute right-4 top-4 flex flex-wrap justify-end gap-2 text-xs">
+        <span className="rounded bg-yellow-100 px-2 py-1 text-yellow-900">Zona endomorfica</span>
+        <span className="rounded bg-green-100 px-2 py-1 text-green-900">Zona balanceada</span>
+        <span className="rounded bg-cyan-100 px-2 py-1 text-cyan-900">Zona ectomorfica</span>
+      </div>
+
+      <div className="h-[320px] w-full overflow-hidden">
+        <ResponsiveContainer width="100%" height="100%">
+          <ScatterChart margin={{ top: 10, right: 26, bottom: 26, left: 18 }}>
           <CartesianGrid strokeDasharray="4 4" />
 
           <ReferenceArea x1={-8} x2={-1} y1={-8} y2={16} fill="#fde68a" fillOpacity={0.2} />
@@ -58,12 +66,8 @@ export function SomatocartaChart({ resultado }: Props) {
           <Scatter data={data} fill="#dc2626">
             <LabelList dataKey="label" position="top" />
           </Scatter>
-        </ScatterChart>
-      </ResponsiveContainer>
-      <div className="mt-2 flex flex-wrap gap-3 text-xs">
-        <span className="rounded bg-yellow-100 px-2 py-1 text-yellow-900">Zona endomorfica</span>
-        <span className="rounded bg-green-100 px-2 py-1 text-green-900">Zona balanceada</span>
-        <span className="rounded bg-cyan-100 px-2 py-1 text-cyan-900">Zona ectomorfica</span>
+          </ScatterChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )

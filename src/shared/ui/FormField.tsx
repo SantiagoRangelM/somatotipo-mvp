@@ -10,6 +10,7 @@ type FieldProps = {
   errors: StudyFormErrors
   type?: 'text' | 'date' | 'number'
   step?: string
+  maxDigits?: number
 }
 
 function errorByPath(errors: StudyFormErrors, name: Path<EstudioSomatotipoFormInput>): string | null {
@@ -31,7 +32,7 @@ function errorByPath(errors: StudyFormErrors, name: Path<EstudioSomatotipoFormIn
   return null
 }
 
-export function FormField({ label, name, register, errors, type = 'number', step = '0.1' }: FieldProps) {
+export function FormField({ label, name, register, errors, type = 'number', step = '0.1', maxDigits }: FieldProps) {
   const message = errorByPath(errors, name)
 
   return (
@@ -40,7 +41,32 @@ export function FormField({ label, name, register, errors, type = 'number', step
       <input
         type={type}
         step={type === 'number' ? step : undefined}
-        className="w-full rounded-xl border border-slate-300 bg-white/90 px-3 py-2.5 text-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-200"
+        className="w-full rounded-xl border border-slate-300 bg-white/90 px-3 py-1.5 text-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-200"
+        onFocus={(event) => {
+          if (type === 'number' && event.currentTarget.value === '0') {
+            event.currentTarget.value = ''
+          }
+        }}
+        onInput={(event) => {
+          if (type === 'number') {
+            const effectiveMaxDigits = maxDigits ?? 4
+            const raw = event.currentTarget.value
+
+            const hasDot = raw.includes('.')
+            const digits = raw.replace(/\D/g, '').slice(0, effectiveMaxDigits)
+
+            if (!hasDot) {
+              event.currentTarget.value = digits
+              return
+            }
+
+            const dotIndex = raw.indexOf('.')
+            const intDigitsOriginal = raw.slice(0, dotIndex).replace(/\D/g, '').length
+            const intDigits = digits.slice(0, intDigitsOriginal)
+            const decimalDigits = digits.slice(intDigits.length)
+            event.currentTarget.value = `${intDigits}.${decimalDigits}`
+          }
+        }}
         {...register(name)}
       />
       {message ? <span className="text-xs text-rose-600">{message}</span> : null}
