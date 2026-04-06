@@ -9,7 +9,8 @@ export function HomePage() {
           Evaluacion antropometrica con pipeline cientifico completo.
         </h1>
         <p className="mt-6 max-w-2xl text-base text-slate-600">
-          Captura medidas, calcula composicion corporal, visualiza somatocarta y exporta reporte profesional en PDF.
+          Captura medidas, calcula composicion corporal, visualiza somatocarta y usa el modulo separado de calorias y
+          macronutrientes.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -17,6 +18,12 @@ export function HomePage() {
             className="rounded-xl bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800"
           >
             Nuevo estudio
+          </Link>
+          <Link
+            to="/nutricion"
+            className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800"
+          >
+            Calcular calorias y macros
           </Link>
           <Link
             to="/resultado"

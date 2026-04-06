@@ -48,23 +48,10 @@ export function FormField({ label, name, register, errors, type = 'number', step
           }
         }}
         onInput={(event) => {
-          if (type === 'number') {
-            const effectiveMaxDigits = maxDigits ?? 4
+          if (type === 'number' && maxDigits != null) {
             const raw = event.currentTarget.value
-
-            const hasDot = raw.includes('.')
-            const digits = raw.replace(/\D/g, '').slice(0, effectiveMaxDigits)
-
-            if (!hasDot) {
-              event.currentTarget.value = digits
-              return
-            }
-
-            const dotIndex = raw.indexOf('.')
-            const intDigitsOriginal = raw.slice(0, dotIndex).replace(/\D/g, '').length
-            const intDigits = digits.slice(0, intDigitsOriginal)
-            const decimalDigits = digits.slice(intDigits.length)
-            event.currentTarget.value = `${intDigits}.${decimalDigits}`
+            const digits = raw.replace(/\D/g, '').slice(0, maxDigits)
+            event.currentTarget.value = digits
           }
         }}
         {...register(name)}
