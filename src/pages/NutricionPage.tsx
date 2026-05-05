@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type { FieldErrors, Path, UseFormRegister } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -15,6 +15,7 @@ import type { NutricionSession } from '../domain/NutricionSession'
 import { readNutritionSession, saveNutritionSession } from '../infrastructure/session/nutritionSessionStore'
 import { readStudySession } from '../infrastructure/session/studySessionStore'
 import { calcularCaloriasYMacronutrientes } from '../services/nutrition/nutritionCalculator'
+import { exportNutritionPrescriptionPdf } from '../services/pdf/exportNutritionPrescriptionPdf'
 import type { CalculoNutricionalInput, CalculoNutricionalResultado } from '../services/nutrition/types'
 
 type NutritionRegister = UseFormRegister<CalculoNutricionalFormInput>
@@ -154,8 +155,15 @@ export function NutricionPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const fromStudy = searchParams.get('desde') === 'estudio'
+  const prescriptionRef = useRef<HTMLDivElement | null>(null)
   const [initialState] = useState(() => buildInitialState(fromStudy))
   const [resultado, setResultado] = useState<CalculoNutricionalResultado | null>(initialState.result)
+  const [session, setSession] = useState<NutricionSession | null>(() => {
+    if (!initialState.result) return null
+
+    return readNutritionSession()
+  })
+  const [isExportingPdf, setIsExportingPdf] = useState(false)
 
   const {
     register,
@@ -183,6 +191,21 @@ export function NutricionPage() {
 
     saveNutritionSession(session)
     setResultado(nextResult)
+    setSession(session)
+  }
+
+  const handleExportPdf = async () => {
+    if (!session || !prescriptionRef.current || isExportingPdf) return
+
+    try {
+      setIsExportingPdf(true)
+      await exportNutritionPrescriptionPdf(session, prescriptionRef.current)
+    } catch (error) {
+      console.error('No se pudo exportar la prescripcion nutricional en PDF', error)
+      window.alert('No se pudo generar el PDF. Intentalo nuevamente.')
+    } finally {
+      setIsExportingPdf(false)
+    }
   }
 
   return (
@@ -260,9 +283,24 @@ export function NutricionPage() {
           </form>
         </section>
 
-        <section>
+        <section className="space-y-4">
           {resultado ? (
-            <NutricionResultadoCard nutricion={resultado} />
+            <>
+              <div className="flex justify-end">
+                <button
+                  data-pdf-ignore="true"
+                  type="button"
+                  onClick={() => void handleExportPdf()}
+                  disabled={!session || isExportingPdf}
+                  className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                >
+                  {isExportingPdf ? 'Generando PDF...' : 'Exportar PDF'}
+                </button>
+              </div>
+              <div ref={prescriptionRef}>
+                <NutricionResultadoCard nutricion={resultado} />
+              </div>
+            </>
           ) : (
             <article className="rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sin calculo aun</p>
